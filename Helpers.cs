@@ -115,9 +115,10 @@ public static class Helpers
     return new AmazonS3Client(credentials, Amazon.RegionEndpoint.APSoutheast1);
   }
 
-  public static async Task<string> UploadFile(string filePath)
+  public static async Task<string> UploadFile(string filePath, int index, int total)
   {
     string fileName = filePath.Replace(Config["Folder"], "").Replace("\\", "/");
+    ConsoleLog(ConsoleColor.Green, $"Uploading {index} / {total}");
     Console.WriteLine($" -> {fileName}");
 
     try

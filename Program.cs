@@ -23,12 +23,22 @@ if(isRun)
     var files = Helpers.GetFilesInFoler(folder);
     int total = files.Count;
     int done = 0;
+    var taskList = new List<Task<string>>();
     for (int i = 0; i < total; i++)
     {
-      Helpers.ConsoleLog(ConsoleColor.Green, $"Uploading {i+1}/{total}...");
-      string link = await Helpers.UploadFile(files[i]);
-      if(!string.IsNullOrEmpty(link))
-        done++;
+      taskList.Add(Helpers.UploadFile(files[i], i+1, total));
+      if(taskList.Count == 10)
+      {
+        var links = await Task.WhenAll(taskList);
+        done += links.Count(x => !string.IsNullOrEmpty(x));
+        taskList.Clear();
+      }
+    }
+    if(taskList.Count > 0)
+    {
+      var links = await Task.WhenAll(taskList);
+      done += links.Count(x => !string.IsNullOrEmpty(x));
+      taskList.Clear();
     }
     results.Add(folder, $"{done}/{total}");
   }
