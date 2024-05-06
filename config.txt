@@ -1,0 +1,5 @@
+ACCESS_KEY=
+SECRET_KEY=
+CDN_URL=
+Bucket=haviland
+Folder=/Users/user/Desktop/
